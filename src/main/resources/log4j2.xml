@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="DEBUG" monitorInterval="30">
+    <Properties>
+        <Property name="baseDir">./logs</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="${baseDir}/demo-app.log"
+                     filePattern="${baseDir}/demo-app.%d{yyyy-MM-dd-HH}-%i.gz">
+            <PatternLayout pattern="%-5p|%d{ISO8601}{GMT}|%X{Log4UUIDFilter.UUID}|%c{1}|%m%ex%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="200 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="50">
+                <!-- Nested conditions: the inner condition is only evaluated on files for which the outer conditions are true. -->
+                <Delete basePath="${baseDir}">
+                    <IfFileName glob="hotel-booking-gta-apibridge.*">
+                        <IfAny>
+                            <IfAccumulatedFileSize exceeds="8 GB"/>
+                            <IfAccumulatedFileCount exceeds="50"/>
+                        </IfAny>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+ 
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>%highlight{%-5p|%d{ISO8601}{GMT}|%X{Log4UUIDFilter.UUID}|%c{1}|%m%ex%n}{FATAL=red blink, ERROR=red,
+                    WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}
+                </pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="TRACE">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+        <Logger name="org.springframework" level="WARN"/>
+        <Logger name="com.jlau78" level="TRACE"/>
+        <Logger name="org.apache.commons.httpclient" level="DEBUG"/>
+        <Logger name="com.jlau78.foursquare.service.VenueQueryClient" level="TRACE"/>
+    </Loggers>
+   
+</Configuration>
