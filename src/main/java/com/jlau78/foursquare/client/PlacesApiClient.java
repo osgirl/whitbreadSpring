@@ -24,12 +24,14 @@ public interface PlacesApiClient {
 	String INTENT_BROWSE = "browse";
 	String API_VERSION = "v";
 	String RADIUS = "radius";
+	String SECTION = "section";
 	String CLIENT_ID = "client_id";
 	String CLIENT_SECRET = "client_secret";
 
 	@RequestMapping(value = "/venues/search", method = RequestMethod.GET, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	VenueSearchRS venueSearchByName(
 	    @RequestParam(value = NEAR) String near,
+	    @RequestParam(value = QUERY) String query,
 	    @RequestParam(value = INTENT) String intent,
 	    @RequestParam(value = API_VERSION) String apiVersion,
 	    @RequestParam(value = CLIENT_ID) String clientId,
@@ -39,6 +41,7 @@ public interface PlacesApiClient {
 	VenueSearchRS venueRecommendationsByName(
 	    @RequestParam(value = QUERY) String query,
 	    @RequestParam(value = NEAR) String near,
+	    @RequestParam(value = SECTION) String section,
 	    @RequestParam(value = RADIUS) String radius,
 	    @RequestParam(value = INTENT) String intent,
 	    @RequestParam(value = API_VERSION) String apiVersion,

@@ -21,10 +21,10 @@ import com.jlau78.foursquare.response.VenueSearchRS;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class VenueSearchCallTest {
+public class VenueRecommendationCallTest {
 
 	@Spy
-	VenueSearchCall apiCall;
+	VenueRecommendationCall apiCall;
 
 	@Mock
 	PlacesApiClient apiClient;
@@ -35,7 +35,8 @@ public class VenueSearchCallTest {
 	@Before
 	public void setUp() throws Exception {
 		when(apiCall.getApiClient()).thenReturn(apiClient);
-		when(apiClient.venueSearchByName(anyString(), anyString(), anyString(), anyString(), anyString(), anyString())).thenReturn(response1);
+		when(apiClient.venueRecommendationsByName(anyString(), anyString(), anyString(), anyString(), anyString(),
+		    anyString(), anyString(), anyString())).thenReturn(response1);
 
 		request1.setClientId("111111");
 		request1.setClientSecret("secretkey");

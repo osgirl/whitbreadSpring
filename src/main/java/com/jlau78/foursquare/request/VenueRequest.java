@@ -10,6 +10,7 @@ public class VenueRequest extends BaseRequest {
 
 	private String near;
 	private String query;
+	private String section;
 	private String radius;
 	private String intent;
 	
