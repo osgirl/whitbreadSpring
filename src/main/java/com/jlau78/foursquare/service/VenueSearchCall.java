@@ -12,23 +12,22 @@ import com.jlau78.foursquare.response.VenueSearchRS;
 import lombok.Getter;
 
 @Controller
-public class VenueSearchCall implements ApiCallService<VenueSearchRS, VenueRequest> {
+public class VenueSearchCall implements ApiCallService<VenueSearchRS, VenueRequest>  {
 
 	@Getter
 	@Autowired
 	private PlacesApiClient apiClient;
 	
-	@Value("${service.foursquare.api.api_version}")
-	String apiVersion = "20190122";
+	@Value("${service.foursquare.api.api_version:20190222}")
+	String apiVersion;
 
-	@Value("${service.foursquare.api.client_id}")
-	String clientId = "";
+	@Value("${service.foursquare.api.client_id:}")
+	String clientId;
 
-	@Value("${service.foursquare.api.client_secret}")
-	String clientSecret = "";
-
+	@Value("${service.foursquare.api.client_secret:}")
+	String clientSecret;
 		
-	@Override
+	@Override 
 	public VenueSearchRS call(VenueRequest request) throws AppException {
 		VenueSearchRS response = null;
 		

@@ -19,7 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.common.exceptions.ExceptionHandler;
-import com.jlau78.foursquare.client.PlacesApiClient;
 import com.jlau78.foursquare.request.VenueRequest;
 import com.jlau78.foursquare.response.Location_;
 import com.jlau78.foursquare.response.Response;
@@ -43,44 +42,36 @@ public class VenueController {
 	@Autowired
 	private VenueSearchCall venueSearchCall;
 
-	@Value("${service.foursquare.api.api_version}")
-	String API_VERSION_DEFAULT = "20190122";
-
-	@Value("${service.foursquare.api.client_id}")
-	String CLIENT_ID;
-
-	@Value("${service.foursquare.api.client_secret}")
-	String CLIENT_SECRET;
-	
 	@ApiOperation("Get Venue by location name")
 	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Response> getVenueByLocationName(@RequestParam(value = "venue") String venue,
 											@RequestParam(value = "query", required = false) String query)    
 	{
 		String errorMsg = "";
-		String intent = PlacesApiClient.INTENT_BROWSE;
-		String apiVersion = API_VERSION_DEFAULT;
-
 		VenueSearchRS rs = null;
 		try {
-			
 			VenueRequest rq = new VenueRequest();
 			rq.setNear(venue);
 			rq.setQuery(query);
+
 			rs = getVenueSearchCall().call(rq);
 
 		} catch (FeignException e) {
 			log.error("Fail connecting to the foursquare api: {0}", e.getMessage());
-			errorMsg = e.getMessage();
+			errorMsg = getErrorMessage(e);
 		} catch (AppException e) {
 			log.error("Fail performing a Venue Search query: {0}", e.getMessage());
-			errorMsg = e.getMessage();
+			errorMsg = getErrorMessage(e);
 		}
 			
 		if (StringUtils.isNotEmpty(errorMsg)) {
 			return ExceptionHandler.handle(errorMsg);
 		}
 		return new ResponseEntity<Response>(rs.getResponse(), HttpStatus.OK);
+	}
+	
+	private String getErrorMessage(final Exception e) {
+		return StringUtils.isNotEmpty(e.getMessage()) ? e.getMessage() : ExceptionHandler.UNEXPECTED_ERROR_MSG;
 	}
 	
 	private List<Venue> getVenues(final VenueSearchRS response) {

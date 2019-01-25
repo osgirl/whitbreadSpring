@@ -35,7 +35,7 @@ public interface PlacesApiClient {
 	    @RequestParam(value = INTENT) String intent,
 	    @RequestParam(value = API_VERSION) String apiVersion,
 	    @RequestParam(value = CLIENT_ID) String clientId,
-	    @RequestParam(value = CLIENT_SECRET) String clientSecret);
+	    @RequestParam(value = CLIENT_SECRET) String clientSecret) throws FeignException;
 
 	@RequestMapping(value = "/venue/explore", method = RequestMethod.GET, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	VenueSearchRS venueRecommendationsByName(
