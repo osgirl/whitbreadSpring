@@ -50,8 +50,7 @@ public class VenueController {
 		String errorMsg = "";
 		VenueSearchRS rs = null;
 		try {
-			VenueRequest rq = new VenueRequest();
-			rq.setNear(venue);
+			VenueRequest rq = new VenueRequest(venue);
 			rq.setQuery(query);
 
 			rs = getVenueSearchCall().call(rq);
@@ -80,7 +79,7 @@ public class VenueController {
 			Response r = response.getResponse();
 			venues = r.venues;
 		}
-		return venues;
+		return venues; 
 	}
 	
 	private String getVenuesJson(final VenueSearchRS response) {

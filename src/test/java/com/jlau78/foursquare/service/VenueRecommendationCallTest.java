@@ -24,7 +24,7 @@ public class VenueRecommendationCallTest {
 	@Injectable
 	PlacesApiClient apiClient;
 
-	VenueRequest request1 = new VenueRequest();
+	VenueRequest request1 = new VenueRequest("rome");
 	VenueSearchRS response1 = new VenueSearchRS();
 
 	@Before

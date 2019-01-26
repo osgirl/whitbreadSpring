@@ -48,8 +48,7 @@ public class VenueControllerTest {
 	@Test
 	public void testVenueSearchSuccess() {
 
-		VenueRequest rq = new VenueRequest();
-		rq.setNear("paris");
+		VenueRequest rq = new VenueRequest("paris");
 		rq.setQuery("cafe");
 
 		ResponseEntity<Response> r = testComponent.getVenueByLocationName("paris", "cafe");
@@ -59,7 +58,7 @@ public class VenueControllerTest {
 
 	@Test
 	public void testVenueSearchNullRequired() {
-		VenueRequest rq = new VenueRequest();
+		VenueRequest rq = new VenueRequest("paris");
 		rq.setNear("");
 
 		ResponseEntity<Response> r = testComponent.getVenueByLocationName("paris", "cafe");

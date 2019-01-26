@@ -35,7 +35,7 @@ public class VenueSearchCallTest {
 	@Injectable
 	String clientSecret;
 
-	VenueRequest request1 = new VenueRequest();
+	VenueRequest request1 = new VenueRequest("rome");
 	VenueSearchRS response1 = new VenueSearchRS();
 
 	@Before

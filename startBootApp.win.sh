@@ -1,7 +1,12 @@
-echo "Starting the hotel-booking-gta-apibridge-ws SpringBoot application......"
+snapshotJar=demo-0.0.1-SNAPSHOT.jar
+
+echo " SpringBoot application ${snapshotJar}......"
 
 JAVA_OPTS="-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n "
-JAVA_OPTS="$JAVA_OPTS -Dcacheloader.backup.dir=c:\\work\\gta\\data\\hbg\\kafkaMessages"
 
-java ${JAVA_OPTS} -jar hotel-booking-gta-apibridge-ws/target/hotel-booking-gta-apibridge-ws-1.0-SNAPSHOT.jar 2> /dev/null
+JAVA_OPTS=" ${JAVA_OPTS} -XX:+UseG1GC"
+JAVA_OPTS=" ${JAVA_OPTS} -verbose:gc  -XX:+PrintGCDateStamps -XX:+PrintGCDetails -Xloggc:./logs/gc-demo.log"
+
+
+java ${JAVA_OPTS} -jar  target/${snapshotJar} 2> /dev/null
 

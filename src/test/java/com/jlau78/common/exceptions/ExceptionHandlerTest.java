@@ -35,7 +35,7 @@ public class ExceptionHandlerTest {
 		ResponseEntity<Response> res = ExceptionHandler.handle(new Object());
 
 		assertTrue(HttpStatus.BAD_REQUEST.equals(res.getStatusCode()));
-		assertTrue(StringUtils.isEmpty(res.getBody().error.getMessage()));
+		assertTrue(ExceptionHandler.UNEXPECTED_ERROR_MSG.equals(res.getBody().error.getMessage()));
 
 	}
 
