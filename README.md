@@ -53,9 +53,6 @@ As the Foursquare API already provided filtering of results via a 'query' param,
 (It was noticed later that there is a limited quota of these venue details calls allowable. So, the component will still return errors for each call to demonstrate it is working)
 
 
-
-
-
 **Notes**
 The server.port is set to 8085 to avoid port conflicts when starting Tomcat. This is done in case developers have an application already running on the default port 8080.
 
@@ -99,7 +96,14 @@ Java version: 1.8.0_131, vendor: Oracle Corporation
 You can run the application directly with the provide scripts for convenience:
 
 Linux/Cygwin:   startBootApp.sh
-Windows:        startBootApp.win.sh
+
+**Workarond**
+You may have issues running the startBootApp.sh as there are CRLF issues when downloaded from GitHub. You can resolve the command below by running in Linux/Cygwin. ^M is typed using Ctrl-V Ctrl-M
+
+```bash
+sed -i 's/^M//g' startBootApp.sh
+```
+
 
 #### Docker
 
