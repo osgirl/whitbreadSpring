@@ -49,13 +49,12 @@ There is a single RestController in this application that exposes the Rest metho
 
 The response Json returned from the Foursquare API is directly mapped to POJOs without modification to the schema. Json class beans were generated online from [jsonschema2pojo](http://www.jsonschema2pojo.org/). It would have been good to map these 'DTO' POJOs to the application specific schema POJOs for future enrichment or persistence. However, attempts at fixing compatibility between my chosen POJO frameworks [MapStruct](http://mapstruct.org) and [Lombok](https://projectlombok.org) were not successfull and hence the current design.
 
-As the Foursquare API already provided filtering of results via a 'query' param, I decide the best way to demonstrate Java 8 features, specifically Lambda, was to provide a component that makes multiple calls for venue details. See [Search and multiple details Rest method](http://localhost:8085/venue/searchAndDetail?venue=London&query=museum).
-(It was noticed later that there is a limited quota of these venue details calls allowable. So, the component will still return errors for each call to demonstrate it is working)
+As the Foursquare API already provided filtering of results via a 'query' param, I decided the best way to demonstrate Java 8 features, specifically Lambda, was to provide a component that makes multiple calls for venue details. See [Search and multiple details Rest method](http://localhost:8085/venue/searchAndDetail?venue=London&query=museum)
 
+(It was noticed later that there is a limited quota of these venue details calls allowable. So, the component will still return errors for each call to demonstrate it is working)
 
 **Notes**
 The server.port is set to 8085 to avoid port conflicts when starting Tomcat. This is done in case developers have an application already running on the default port 8080.
-
 
 
 ### Json To Java: jsonschema2pojo 
