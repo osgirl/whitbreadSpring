@@ -1,8 +1,5 @@
 package com.jlau78.foursquare.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-
 import com.jlau78.common.exceptions.AppException;
 
 /**

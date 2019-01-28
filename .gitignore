@@ -1,10 +1,20 @@
 /logs/*
 /data/
-/target/
 !.mvn/wrapper/maven-wrapper.jar
 .mvn/
 mvnw
 mvnw.cmd
+
+!target/*.jar
+!target/demo-0.0.1-SNAPSHOT.jar
+target/demo-0.0.1-SNAPSHOT.jar.original
+target/maven-status/*
+target/generated-sources/*
+target/classes/*
+target/generated-test-sources/*
+target/test-classes/*
+target/surefire-reports/*
+target/maven-archiver/*
 
 
 ### STS ###

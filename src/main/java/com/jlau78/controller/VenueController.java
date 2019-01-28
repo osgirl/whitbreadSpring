@@ -13,13 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.common.exceptions.ExceptionHandler;
 import com.jlau78.foursquare.request.VenueDetailsRequest;
 import com.jlau78.foursquare.request.VenueRequest;
-import com.jlau78.foursquare.response.venue.Location_;
 import com.jlau78.foursquare.response.venue.SearchResponse;
 import com.jlau78.foursquare.response.venue.Venue;
 import com.jlau78.foursquare.response.venue.VenueDetailRS;
@@ -28,7 +25,7 @@ import com.jlau78.foursquare.response.venue.VenueSearchRS;
 import com.jlau78.foursquare.service.VenueDetailsCall;
 import com.jlau78.foursquare.service.VenueRecommendationCall;
 import com.jlau78.foursquare.service.VenueSearchCall;
-import com.jlau78.handler.VenueDetailsQueryHandler;
+import com.jlau78.handler.VenueDetailsMulitQueryHandler;
 import com.jlau78.handler.VenueSearchCallHandler;
 
 import feign.FeignException;
@@ -46,117 +43,40 @@ public class VenueController {
 	@Getter
 	@Autowired
 	private VenueSearchCall venueSearchCall;
-	
-	@Getter
-	@Autowired
-	private VenueRecommendationCall venueRecommendationCall;
-	
+	  
   @Getter
   @Autowired
-  private VenueDetailsCall venueDetailsCall;
+  VenueDetailsMulitQueryHandler venueDetailsHandler;
+  
+  @Getter
+  @Autowired
+  VenueSearchCallHandler venueSearchCallHandler;
 
-	@ApiOperation("Get Venue by location name")
+	@ApiOperation("Get Venue by location name and optional query")
 	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SearchResponse> getVenueByLocationName(@RequestParam(value = "venue") String venue,
 											@RequestParam(value = "query", required = false) String query)    
 	{
 		String errorMsg = "";
-		VenueSearchRS rs = null;
-		try {
-			VenueRequest rq = new VenueRequest(venue);
-			rq.setQuery(query);
-
-			rs = getVenueSearchCall().call(rq);
-
-		} catch (FeignException e) {
-			log.error("Fail connecting to the foursquare api: {0}", e.getMessage());
-			errorMsg = getErrorMessage(e);
-		} catch (AppException e) {
-			log.error("Fail performing a Venue Search query: {0}", e.getMessage());
-			errorMsg = getErrorMessage(e);
-		}
+		
+		VenueRequest rq = new VenueRequest(venue);
+		rq.setQuery(query);
+		VenueSearchRS searchResponse = getVenueSearchCallHandler().handle(rq);
 			
 		if (StringUtils.isNotEmpty(errorMsg)) {
 			return ExceptionHandler.handleSearchError(errorMsg);
 		}
-		return new ResponseEntity<SearchResponse>(rs.getResponse(), HttpStatus.OK);
+		return new ResponseEntity<SearchResponse>(searchResponse.getResponse(), HttpStatus.OK);
 	}
-	
-	@ApiOperation("Get Venue by location name")
-	@RequestMapping(value = "/recommend", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SearchResponse> getVenueRecommendations(@RequestParam(value = "venue") String venue,
-											@RequestParam(value = "query", required = false) String query,
-											@RequestParam(value = "section", required = false) String section,
-											@RequestParam(value = "radius", required = false) String radius)    
-	{
-		String errorMsg = "";
-		VenueSearchRS rs = null;
-		try {
-			VenueRequest rq = new VenueRequest(venue);
-			rq.setQuery(query);
-			rq.setSection(section);
-			rq.setRadius(radius);
-
-			rs = getVenueRecommendationCall().call(rq);
-
-		} catch (FeignException e) {
-			log.error("Fail connecting to the foursquare api: {0}", e.getMessage());
-			errorMsg = getErrorMessage(e);
-		} catch (AppException e) {
-			log.error("Fail performing a Venue Search query: {0}", e.getMessage());
-			errorMsg = getErrorMessage(e);
-		}
-			
-		if (StringUtils.isNotEmpty(errorMsg)) {
-			return ExceptionHandler.handleSearchError(errorMsg);
-		}
-		return new ResponseEntity<SearchResponse>(rs.getResponse(), HttpStatus.OK);
-	}
-	
-  @ApiOperation("Get the Venue details")
-  @RequestMapping(value = "/detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<DetailResponse> getVenueDetail(@RequestParam(value = "venueId") String venueId)
-  {
-    String errorMsg = "";
-    
-    VenueDetailRS rs = null;
-    try {
-      VenueDetailsRequest rq = new VenueDetailsRequest(venueId);
-
-      rs = getVenueDetailsCall().call(rq);
-
-    } catch (FeignException e) {
-      log.error("Fail connecting to the foursquare api: {0}", e.getMessage());
-      errorMsg = getErrorMessage(e);
-    } catch (AppException e) {
-      log.error("Fail performing a Venue Search query: {0}", e.getMessage());
-      errorMsg = getErrorMessage(e);
-    }
-    
-    if (StringUtils.isNotEmpty(errorMsg)) {
-      return ExceptionHandler.handleDetailError(errorMsg);
-    }
-    return new ResponseEntity<DetailResponse>(rs.getResponse(), HttpStatus.OK);
-
-  }
-  
-  
-  @Getter
-  @Autowired
-  VenueDetailsQueryHandler venueDetailsHandler;
-  
-  @Getter
-  @Autowired
-  VenueSearchCallHandler venueSearchCallHandler;
-  
-  
-  @ApiOperation("Search for Venue and get all the venues details")
+	  
+  @ApiOperation("Search for Venue and get all the venues details. Limit to 4 results due to allowed quota")
   @RequestMapping(value = "/searchAndDetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<List<DetailResponse>> venueSearchAndDetail(@RequestParam(value = "venue") String venue,
-			@RequestParam(value = "query", required = false) String query)
+  public ResponseEntity<List<DetailResponse>> venueSearchAndDetail(
+  								@RequestParam(value = "venue") String venue,
+									@RequestParam(value = "query", required = false) String query)
   {
 		VenueRequest rq = new VenueRequest(venue);
-		rq.setLimit("5");
+		rq.setLimit("4");
   	VenueSearchRS searchResponse = getVenueSearchCallHandler().handle(rq);
   	
   	List<VenueDetailRS> detailsResponses = getVenueDetailsHandler().handle(getVenueIds(searchResponse));
@@ -167,11 +87,7 @@ public class VenueController {
   	
   	return new ResponseEntity<List<DetailResponse>>(rs, HttpStatus.OK);
   }
-  
-	private String getErrorMessage(final Exception e) {
-		return StringUtils.isNotEmpty(e.getMessage()) ? e.getMessage() : ExceptionHandler.UNEXPECTED_ERROR_MSG;
-	}
-	
+ 
 	private List<String> getVenueIds(final VenueSearchRS response) {
 		List<String> venueIds = null;
 		if (response != null && response.getResponse() != null) {

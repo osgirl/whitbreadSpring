@@ -1,10 +1,13 @@
 package com.jlau78.handler;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jlau78.common.exceptions.AppException;
+import com.jlau78.common.exceptions.ErrorResponse;
 import com.jlau78.foursquare.request.VenueRequest;
+import com.jlau78.foursquare.response.venue.SearchResponse;
 import com.jlau78.foursquare.response.venue.VenueSearchRS;
 import com.jlau78.foursquare.service.VenueSearchCall;
 
@@ -38,13 +41,20 @@ public class VenueSearchCallHandler implements Handler<VenueRequest, VenueSearch
       rs = getApiCall().call(input);
 
     } catch (FeignException e) {
-      log.error("Fail connecting to the foursquare api: {0}", e.getMessage());
+      log.error("FeignException connecting to the foursquare api: {}", e.getMessage());
       errorMsg = e.getMessage();
     } catch (AppException e) {
-      log.error("Fail performing a Venue Search query: {0}", e.getMessage());
+      log.error("AppException performing a Venue Search query: {}", e.getMessage());
       errorMsg = e.getMessage();
     }
 
+    if (StringUtils.isNotEmpty(errorMsg)) {
+    	rs = new VenueSearchRS();
+    	SearchResponse detailResponse = new SearchResponse();
+    	detailResponse.error =  new ErrorResponse(errorMsg);
+    	rs.setResponse(detailResponse);
+    }
+    
     return rs;
 	}
 }
