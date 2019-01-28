@@ -5,12 +5,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +20,6 @@ import com.jlau78.common.exceptions.ExceptionHandler;
 import com.jlau78.foursquare.request.VenueDetailsRequest;
 import com.jlau78.foursquare.request.VenueRequest;
 import com.jlau78.foursquare.response.venue.Location_;
-import com.jlau78.foursquare.response.venue.Response;
 import com.jlau78.foursquare.response.venue.SearchResponse;
 import com.jlau78.foursquare.response.venue.Venue;
 import com.jlau78.foursquare.response.venue.VenueDetailRS;
@@ -32,6 +28,8 @@ import com.jlau78.foursquare.response.venue.VenueSearchRS;
 import com.jlau78.foursquare.service.VenueDetailsCall;
 import com.jlau78.foursquare.service.VenueRecommendationCall;
 import com.jlau78.foursquare.service.VenueSearchCall;
+import com.jlau78.handler.VenueDetailsQueryHandler;
+import com.jlau78.handler.VenueSearchCallHandler;
 
 import feign.FeignException;
 import io.swagger.annotations.Api;
@@ -119,7 +117,6 @@ public class VenueController {
   @RequestMapping(value = "/detail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<DetailResponse> getVenueDetail(@RequestParam(value = "venueId") String venueId)
   {
-
     String errorMsg = "";
     
     VenueDetailRS rs = null;
@@ -143,39 +140,50 @@ public class VenueController {
 
   }
   
+  
+  @Getter
+  @Autowired
+  VenueDetailsQueryHandler venueDetailsHandler;
+  
+  @Getter
+  @Autowired
+  VenueSearchCallHandler venueSearchCallHandler;
+  
+  
+  @ApiOperation("Search for Venue and get all the venues details")
+  @RequestMapping(value = "/searchAndDetail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<List<DetailResponse>> venueSearchAndDetail(@RequestParam(value = "venue") String venue,
+			@RequestParam(value = "query", required = false) String query)
+  {
+		VenueRequest rq = new VenueRequest(venue);
+		rq.setLimit("5");
+  	VenueSearchRS searchResponse = getVenueSearchCallHandler().handle(rq);
+  	
+  	List<VenueDetailRS> detailsResponses = getVenueDetailsHandler().handle(getVenueIds(searchResponse));
+  	
+  	List<DetailResponse> rs = detailsResponses.stream()
+  									.map(ds -> ds.getResponse())
+  									.collect(Collectors.toList());
+  	
+  	return new ResponseEntity<List<DetailResponse>>(rs, HttpStatus.OK);
+  }
+  
 	private String getErrorMessage(final Exception e) {
 		return StringUtils.isNotEmpty(e.getMessage()) ? e.getMessage() : ExceptionHandler.UNEXPECTED_ERROR_MSG;
 	}
 	
-	private List<Venue> getVenues(final VenueSearchRS response) {
-		List<Venue> venues = null;
+	private List<String> getVenueIds(final VenueSearchRS response) {
+		List<String> venueIds = null;
 		if (response != null && response.getResponse() != null) {
 			SearchResponse r = response.getResponse();
-			venues = r.venues;
+			List<Venue> venues = r.venues;
+			
+			venueIds = venues.stream()
+												.map(v -> v.id)
+												.collect(Collectors.toList());
 		}
-		return venues; 
+		return venueIds; 
 	}
 	
-	private String getVenuesJson(final VenueSearchRS response) {
-		String venuesJson = "{}";
-		if (response != null && response.getResponse() != null) {
-			SearchResponse r = response.getResponse();
-			try
-			{
-				List<Venue> venues = r.venues;
-				
-				List<Location_> locations = venues.stream()
-																					.map(v -> v.location )
-																					.collect(Collectors.toList());
-				
-				ObjectMapper mapper = new ObjectMapper();
-				venuesJson = mapper.writeValueAsString(venues);
-
-			} catch (JsonProcessingException e) {
-				log.error("Failed convert the venues to Json", e);
-			}
-		}
-		return venuesJson;
-	}
 
 }

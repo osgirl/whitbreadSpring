@@ -39,7 +39,7 @@ public class VenueRecommendationCall implements ApiCallService<VenueSearchRS, Ve
 			response = getApiClient()
 								.venueRecommendationsByName(request.getQuery(), request.getNear(), 
 																						request.getSection(), request.getRadius(), 
-																						request.getIntent(), 
+																						request.getLimit(), request.getIntent(), 
 																						apiVersion, clientId, clientSecret);
 		}
 		return response;

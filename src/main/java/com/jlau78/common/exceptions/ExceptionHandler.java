@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.jlau78.foursquare.response.venue.DetailResponse;
-import com.jlau78.foursquare.response.venue.Response;
 import com.jlau78.foursquare.response.venue.SearchResponse;
 
 

@@ -1,6 +1,7 @@
 package com.jlau78.foursquare.service;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +10,6 @@ import org.junit.runner.RunWith;
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.foursquare.client.PlacesApiClient;
 import com.jlau78.foursquare.request.VenueRequest;
-import com.jlau78.foursquare.response.venue.Response;
 import com.jlau78.foursquare.response.venue.SearchResponse;
 import com.jlau78.foursquare.response.venue.VenueSearchRS;
 
@@ -53,7 +53,7 @@ public class VenueSearchCallTest {
 	public void testCallSuccess() throws AppException {
 		new Expectations() {
 			{
-				apiClient.venueSearchByName(anyString, anyString, anyString, anyString, anyString, anyString);
+				apiClient.venueSearchByName(anyString, anyString, anyString, anyString, anyString, anyString, anyString);
 				result = response1;
 			}
 		};

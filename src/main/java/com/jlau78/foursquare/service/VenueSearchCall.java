@@ -34,7 +34,7 @@ public class VenueSearchCall implements ApiCallService<VenueSearchRS, VenueReque
 		VenueSearchRS response = null;
 		
 		if (request != null) {
-			response = getApiClient().venueSearchByName(request.getNear(), request.getQuery(), request.getIntent(), apiVersion, 
+			response = getApiClient().venueSearchByName(request.getNear(), request.getQuery(), request.getLimit(), request.getIntent(), apiVersion, 
 												clientId, clientSecret);
 		}
 		return response;

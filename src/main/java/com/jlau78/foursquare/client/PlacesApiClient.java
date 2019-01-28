@@ -17,6 +17,7 @@ public interface PlacesApiClient {
 
 	String QUERY = "query";
 	String NEAR = "near";
+	String LIMIT = "limit";
 	String INTENT = "intent";
 	String INTENT_BROWSE = "browse";
 	String API_VERSION = "v";
@@ -29,6 +30,7 @@ public interface PlacesApiClient {
 	VenueSearchRS venueSearchByName(
 	    @RequestParam(value = NEAR) String near,
 	    @RequestParam(value = QUERY) String query,
+	    @RequestParam(value = LIMIT) String limit,
 	    @RequestParam(value = INTENT) String intent,
 	    @RequestParam(value = API_VERSION) String apiVersion,
 	    @RequestParam(value = CLIENT_ID) String clientId,
@@ -40,6 +42,7 @@ public interface PlacesApiClient {
 	    @RequestParam(value = NEAR) String near,
 	    @RequestParam(value = SECTION) String section,
 	    @RequestParam(value = RADIUS) String radius,
+	    @RequestParam(value = LIMIT) String limit,
 	    @RequestParam(value = INTENT) String intent,
 	    @RequestParam(value = API_VERSION) String apiVersion,
 	    @RequestParam(value = CLIENT_ID) String clientId,
