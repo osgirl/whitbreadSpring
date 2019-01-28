@@ -1,4 +1,4 @@
-package com.jlau78.foursquare.response;
+package com.jlau78.foursquare.response.venue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,20 +9,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+/**
+ * Generated from: http://www.jsonschema2pojo.org/
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-    "label",
-    "lat",
-    "lng"
-})
-public class LabeledLatLng {
+@JsonPropertyOrder({ "code", "errorType", "errorDetail", "requestId" })
+public class Meta {
 
-	@JsonProperty("label")
-	public String label;
-	@JsonProperty("lat")
-	public Double lat;
-	@JsonProperty("lng")
-	public Double lng;
+	@JsonProperty("code")
+	public Integer code;
+	@JsonProperty("errorType")
+	public String errorType;
+	@JsonProperty("errorDetail")
+	public String errorDetail;
+	@JsonProperty("requestId")
+	public String requestId;
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

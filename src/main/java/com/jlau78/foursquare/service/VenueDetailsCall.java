@@ -6,7 +6,10 @@ import org.springframework.stereotype.Controller;
 
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.foursquare.client.PlacesApiClient;
+import com.jlau78.foursquare.request.VenueDetailsRequest;
 import com.jlau78.foursquare.request.VenueRequest;
+import com.jlau78.foursquare.response.venue.DetailResponse;
+import com.jlau78.foursquare.response.venue.VenueDetailRS;
 import com.jlau78.foursquare.response.venue.VenueSearchRS;
 
 import lombok.Getter;
@@ -14,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-public class VenueSearchCall implements ApiCallService<VenueSearchRS, VenueRequest>  {
+public class VenueDetailsCall implements ApiCallService<VenueDetailRS, VenueDetailsRequest>  {
 
 	@Getter
 	@Autowired
@@ -30,11 +33,11 @@ public class VenueSearchCall implements ApiCallService<VenueSearchRS, VenueReque
 	String clientSecret;
 		
 	@Override 
-	public VenueSearchRS call(VenueRequest request) throws AppException {
-		VenueSearchRS response = null;
+	public VenueDetailRS call(VenueDetailsRequest request) throws AppException {
+		VenueDetailRS response = null;
 		
 		if (request != null) {
-			response = getApiClient().venueSearchByName(request.getNear(), request.getQuery(), request.getIntent(), apiVersion, 
+			response = getApiClient().venueDetails(request.getVenueId(), apiVersion, 
 												clientId, clientSecret);
 		}
 		return response;

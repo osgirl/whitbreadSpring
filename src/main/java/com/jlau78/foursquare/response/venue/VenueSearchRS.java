@@ -1,4 +1,4 @@
-package com.jlau78.foursquare.response;
+package com.jlau78.foursquare.response.venue;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -15,6 +15,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false)
 public class VenueSearchRS implements QueryResponse {
 	
-	private Response response;
-
+	private SearchResponse response;
+	
 }

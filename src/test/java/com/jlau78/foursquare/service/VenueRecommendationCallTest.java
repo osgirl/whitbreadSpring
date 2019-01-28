@@ -8,8 +8,9 @@ import org.junit.runner.RunWith;
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.foursquare.client.PlacesApiClient;
 import com.jlau78.foursquare.request.VenueRequest;
-import com.jlau78.foursquare.response.Response;
-import com.jlau78.foursquare.response.VenueSearchRS;
+import com.jlau78.foursquare.response.venue.Response;
+import com.jlau78.foursquare.response.venue.SearchResponse;
+import com.jlau78.foursquare.response.venue.VenueSearchRS;
 
 import mockit.Expectations;
 import mockit.Injectable;
@@ -33,7 +34,7 @@ public class VenueRecommendationCallTest {
 		request1.setClientId("111111");
 		request1.setClientSecret("secretkey");
 		request1.setVersion("20190222");
-		response1.setResponse(new Response());
+		response1.setResponse(new SearchResponse());
 
 	}
 

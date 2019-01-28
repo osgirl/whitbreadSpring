@@ -1,4 +1,4 @@
-package com.jlau78.foursquare.response;
+package com.jlau78.foursquare.response.venue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,21 +12,27 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "what",
-    "where",
-    "feature",
-    "parents"
+    "id",
+    "name",
+    "location",
+    "categories",
+    "referralId",
+    "hasPerk"
 })
-public class Geocode {
+public class Venue {
 
-	@JsonProperty("what")
-	public String what;
-	@JsonProperty("where")
-	public String where;
-	// @JsonProperty("feature")
-	// public Feature feature;
-	@JsonProperty("parents")
-	public List<Object> parents = null;
+	@JsonProperty("id")
+	public String id;
+	@JsonProperty("name")
+	public String name;
+	@JsonProperty("location")
+	public Location_ location;
+	@JsonProperty("categories")
+	public List<Category> categories = null;
+	@JsonProperty("referralId")
+	public String referralId;
+	@JsonProperty("hasPerk")
+	public Boolean hasPerk;
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

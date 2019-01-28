@@ -1,4 +1,4 @@
-package com.jlau78.foursquare.response;
+package com.jlau78.foursquare.response.venue;
 
 import lombok.Data;
 

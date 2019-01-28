@@ -13,9 +13,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.foursquare.request.VenueRequest;
-import com.jlau78.foursquare.response.Response;
-import com.jlau78.foursquare.response.Venue;
-import com.jlau78.foursquare.response.VenueSearchRS;
+import com.jlau78.foursquare.response.venue.Response;
+import com.jlau78.foursquare.response.venue.SearchResponse;
+import com.jlau78.foursquare.response.venue.Venue;
+import com.jlau78.foursquare.response.venue.VenueSearchRS;
+import com.jlau78.foursquare.service.VenueDetailsCall;
+import com.jlau78.foursquare.service.VenueRecommendationCall;
 import com.jlau78.foursquare.service.VenueSearchCall;
 
 import feign.FeignException;
@@ -34,11 +37,17 @@ public class VenueControllerTest {
 	@Injectable
 	VenueSearchCall callService;
 
+	@Injectable
+	VenueRecommendationCall recommendService;
+
+	@Injectable
+	VenueDetailsCall detailsService;
+
 	@Mocked
 	FeignException feignException;
 
 	VenueSearchRS vResponse = new VenueSearchRS();
-	Response response1 = new Response();
+	SearchResponse response1 = new SearchResponse();
 
 	@Before
 	public void setUp() throws Exception {
@@ -51,7 +60,7 @@ public class VenueControllerTest {
 		VenueRequest rq = new VenueRequest("paris");
 		rq.setQuery("cafe");
 
-		ResponseEntity<Response> r = testComponent.getVenueByLocationName("paris", "cafe");
+		ResponseEntity<SearchResponse> r = testComponent.getVenueByLocationName("paris", "cafe");
 
 		assertTrue(HttpStatus.OK.equals(r.getStatusCode()));
 	}
@@ -61,7 +70,7 @@ public class VenueControllerTest {
 		VenueRequest rq = new VenueRequest("paris");
 		rq.setNear("");
 
-		ResponseEntity<Response> r = testComponent.getVenueByLocationName("paris", "cafe");
+		ResponseEntity<SearchResponse> r = testComponent.getVenueByLocationName("paris", "cafe");
 
 		assertTrue(HttpStatus.OK.equals(r.getStatusCode()));
 	}
@@ -75,7 +84,7 @@ public class VenueControllerTest {
 			}
 		};
 
-		ResponseEntity<Response> r = testComponent.getVenueByLocationName("paris", "cafe");
+		ResponseEntity<SearchResponse> r = testComponent.getVenueByLocationName("paris", "cafe");
 
 		assertNotNull(r.getBody().error);
 	}
@@ -89,7 +98,7 @@ public class VenueControllerTest {
 			}
 		};
 
-		ResponseEntity<Response> r = testComponent.getVenueByLocationName("paris", "cafe");
+		ResponseEntity<SearchResponse> r = testComponent.getVenueByLocationName("paris", "cafe");
 
 		assertNotNull(r.getBody().error);
 	}

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.jlau78.foursquare.client.PlacesApiClient;
 import com.jlau78.foursquare.request.VenueRequest;
-import com.jlau78.foursquare.response.VenueSearchRS;
+import com.jlau78.foursquare.response.venue.VenueSearchRS;
 
 import lombok.Getter;
 

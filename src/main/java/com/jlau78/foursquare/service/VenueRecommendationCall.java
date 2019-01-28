@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import com.jlau78.common.exceptions.AppException;
 import com.jlau78.foursquare.client.PlacesApiClient;
 import com.jlau78.foursquare.request.VenueRequest;
-import com.jlau78.foursquare.response.VenueSearchRS;
+import com.jlau78.foursquare.response.venue.VenueSearchRS;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,11 @@ public class VenueRecommendationCall implements ApiCallService<VenueSearchRS, Ve
 		VenueSearchRS response = null;
 
 		if (request != null) {
-			response = getApiClient().venueRecommendationsByName(request.getQuery(), request.getNear(), request.getSection(), request.getRadius(), 
-																request.getIntent(), apiVersion, clientId, clientSecret);
+			response = getApiClient()
+								.venueRecommendationsByName(request.getQuery(), request.getNear(), 
+																						request.getSection(), request.getRadius(), 
+																						request.getIntent(), 
+																						apiVersion, clientId, clientSecret);
 		}
 		return response;
 

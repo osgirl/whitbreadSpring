@@ -1,4 +1,4 @@
-package com.jlau78.foursquare.response;
+package com.jlau78.foursquare.response.venue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,12 +11,27 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "response"
+    "id",
+    "name",
+    "pluralName",
+    "shortName",
+    "icon",
+    "primary"
 })
-public class Location {
+public class Category {
 
-	@JsonProperty("response")
-	public Response response;
+	@JsonProperty("id")
+	public String id;
+	@JsonProperty("name")
+	public String name;
+	@JsonProperty("pluralName")
+	public String pluralName;
+	@JsonProperty("shortName")
+	public String shortName;
+	@JsonProperty("icon")
+	public Icon icon;
+	@JsonProperty("primary")
+	public Boolean primary;
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 

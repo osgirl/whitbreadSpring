@@ -1,4 +1,4 @@
-package com.jlau78.foursquare.response;
+package com.jlau78.foursquare.response.venue;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +16,7 @@ import com.jlau78.common.exceptions.ErrorResponse;
     "venues",
     "geocode"
 })
-public class Response {
+public class SearchResponse implements Response {
 
 	@JsonProperty("venues")
 	public List<Venue> venues = null;
@@ -27,14 +27,19 @@ public class Response {
 	@JsonIgnore
 	private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-	// @JsonAnyGetter
-	// public Map<String, Object> getAdditionalProperties() {
-	// return this.additionalProperties;
-	// }
-	//
-	// @JsonAnySetter
-	// public void setAdditionalProperty(String name, Object value) {
-	// this.additionalProperties.put(name, value);
-	// }
+	 @JsonAnyGetter
+	 public Map<String, Object> getAdditionalProperties() {
+	 return this.additionalProperties;
+	 }
+	
+	 @JsonAnySetter
+	 public void setAdditionalProperty(String name, Object value) {
+	 this.additionalProperties.put(name, value);
+	 }
+
+	@Override
+	public ErrorResponse getError() {
+		return this.error;
+	}
 
 }
