@@ -9,15 +9,15 @@ jameslauwf@gmail.com
 - Requirements
 - Git Repository
 - Design
-  - Json To Java: jsonschema2pojo
+  - VenueController Responses
   - Spring Cloud library and reducing boilerplate code
     - Lombok
     - Netflix Feign
+  - Json To Java: jsonschema2pojo
 - Steps
   - Build
   - Running the Application
     - Shell startup scripts
-    - Docker
 - Issues
   - Slf4j library conflicts preventing Debug level statements
 
@@ -53,13 +53,14 @@ As the Foursquare API already provided filtering of results via a 'query' param,
 
 (It was noticed later that there is a limited quota of these venue details calls allowable. So, the component will still return errors for each call to demonstrate it is working)
 
+### VenueController Responses
+
+The application will return HTTP Response code OK (200) and BAD_REQUEST (400). 
+
+Where there is an error making the Foursquare API call, the error from the API call will be propagated as is and returned as-is in the Response Json.
+
 **Notes**
 The server.port is set to 8085 to avoid port conflicts when starting Tomcat. This is done in case developers have an application already running on the default port 8080.
-
-
-### Json To Java: jsonschema2pojo 
-
-The site [jsonschema2pojo](http://www.jsonschema2pojo.org/) was used to generated the Java Jackson 2 beans code for the Response POJOs.
 
 ### Spring Cloud library and reducing boilerplate code
 
@@ -75,6 +76,9 @@ The Netflix Feign libraries are used for making calls to the Foursquare Rest API
 
 Other Cloud features are not implemented in this demo, but the use of the Feign libraries works nicely with features like the Hystrix circuit breaker and Ribbon load balancing libraries among others. Hence the choice to use it for this feature.
 
+### Json To Java: jsonschema2pojo 
+
+The site [jsonschema2pojo](http://www.jsonschema2pojo.org/) was used to generated the Java Jackson 2 beans code for the Response POJOs.
 
 ## Steps
 
@@ -95,21 +99,6 @@ Java version: 1.8.0_131, vendor: Oracle Corporation
 You can run the application directly with the provide scripts for convenience:
 
 Linux/Cygwin:   startBootApp.sh
-
-**Workarond**
-You may have issues running the startBootApp.sh as there are CRLF issues when downloaded from GitHub. You can resolve the command below by running in Linux/Cygwin. ^M is typed using Ctrl-V Ctrl-M
-
-```bash
-sed -i 's/^M//g' startBootApp.sh
-```
-
-
-#### Docker
-
-I have also provided a script to run the application in a Docker container. On my Windows PC I am not able to run Docker due to HyperVisor being enabled for my VirtualBox VMs. So only a shell script has been provided to be run in Linux: startdockerimages.sh
-
-This script will build/rebuild the Docker image and run the image.
-
 
 ## Issues
 
